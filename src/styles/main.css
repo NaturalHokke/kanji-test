@@ -2,6 +2,23 @@
     --font-print: "UD Mincho", "BIZ UDPMincho", "Yu Mincho", "Hiragino Mincho ProN", "MS Mincho", serif;
     --font-ui: "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
     --box-border: 1.5px solid #111;
+
+    /* 編集 UI（16px 基準・タップしやすいコントロール高） */
+    --ui-text: 1rem;
+    --ui-text-sm: 0.875rem;
+    --ui-label: 0.875rem;
+    --ui-heading: 1.375rem;
+    --ui-sidebar-width: 24rem;
+    --ui-space-xs: 0.5rem;
+    --ui-space-sm: 0.75rem;
+    --ui-space-md: 1rem;
+    --ui-space-lg: 1.25rem;
+    --ui-input-pad-y: 0.625rem;
+    --ui-input-pad-x: 0.75rem;
+    --ui-radius: 6px;
+    --ui-control-min-h: 2.75rem;
+
+    interpolate-size: allow-keywords;
 }
 
 * { box-sizing: border-box; }
@@ -9,6 +26,8 @@
 body {
     margin: 0;
     font-family: var(--font-ui);
+    font-size: var(--ui-text);
+    line-height: 1.5;
     background: #f0f2f5;
     color: #222;
 }
@@ -16,7 +35,7 @@ body {
 /* ===== 編集パネル（画面のみ） ===== */
 .editor {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: var(--ui-sidebar-width) 1fr;
     gap: 0;
     height: 100dvh;
     overflow: hidden;
@@ -25,7 +44,7 @@ body {
 .sidebar {
     background: #fff;
     border-right: 1px solid #ddd;
-    padding: 16px;
+    padding: var(--ui-space-lg);
     overflow-y: auto;
     max-height: 100vh;
     position: sticky;
@@ -33,24 +52,25 @@ body {
 }
 
 .sidebar h1 {
-    font-size: 1.1rem;
-    margin: 0 0 12px;
+    font-size: var(--ui-heading);
+    line-height: 1.3;
+    margin: 0 0 var(--ui-space-md);
     border-bottom: 2px solid #333;
-    padding-bottom: 8px;
+    padding-bottom: var(--ui-space-sm);
 }
 
 .sidebar label {
     display: block;
-    font-size: 0.78rem;
-    color: #555;
-    margin: 10px 0 4px;
+    font-size: var(--ui-label);
+    color: #444;
+    margin: var(--ui-space-md) 0 var(--ui-space-xs);
 }
 
 .field-label-row {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin: 10px 0 4px;
+    gap: var(--ui-space-xs);
+    margin: var(--ui-space-md) 0 var(--ui-space-xs);
 }
 
 .field-label-row label {
@@ -59,11 +79,11 @@ body {
 
 .notation-help-trigger {
     anchor-name: --notation-help-trigger;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.375rem;
+    height: 1.375rem;
     padding: 0;
     border-radius: 50%;
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
     font-weight: bold;
     line-height: 1;
     border: 1px solid #aaa;
@@ -71,6 +91,7 @@ body {
     color: #555;
     cursor: help;
     flex-shrink: 0;
+    min-height: auto;
 }
 
 .notation-help-trigger:hover,
@@ -86,11 +107,11 @@ body {
     inset: unset;
     top: anchor(bottom);
     left: anchor(left);
-    margin: 6px 0 0 0;
-    padding: 10px 12px;
-    width: min(18rem, calc(100vw - 24px));
-    font-size: 0.75rem;
-    line-height: 1.55;
+    margin: var(--ui-space-xs) 0 0 0;
+    padding: var(--ui-space-sm) var(--ui-space-md);
+    width: min(20rem, calc(100vw - 24px));
+    font-size: var(--ui-text-sm);
+    line-height: 1.6;
     color: #333;
     background: #fff;
     border: 1px solid #ccc;
@@ -109,37 +130,126 @@ body {
 .sidebar textarea {
     width: 100%;
     font-family: var(--font-ui);
-    font-size: 0.9rem;
+    font-size: var(--ui-text);
     border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 6px 8px;
+    border-radius: var(--ui-radius);
+    padding: var(--ui-input-pad-y) var(--ui-input-pad-x);
+}
+
+.sidebar input[type="text"],
+.sidebar select {
+    min-height: var(--ui-control-min-h);
 }
 
 .sidebar textarea {
-    height: 280px;
+    height: 18rem;
+    min-height: 12rem;
     resize: vertical;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .row-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: var(--ui-space-sm);
+}
+
+/* 文字サイズ・余白（details / summary アコーディオン） */
+.size-settings-accordion {
+    margin: var(--ui-space-md) 0;
+    border: 1px solid #ddd;
+    border-radius: var(--ui-radius);
+    background: #fafbfc;
+}
+
+.size-settings-accordion::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+        block-size 0.3s ease,
+        content-visibility 0.3s allow-discrete;
+}
+
+.size-settings-accordion[open]::details-content {
+    block-size: auto;
+}
+
+.size-settings-accordion summary {
+    padding: var(--ui-space-sm) var(--ui-space-md);
+    font-size: var(--ui-label);
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ui-space-sm);
+    min-height: var(--ui-control-min-h);
+    user-select: none;
+}
+
+.size-settings-accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.size-settings-accordion summary::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid #666;
+    border-bottom: 2px solid #666;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+}
+
+.size-settings-accordion[open] summary::after {
+    transform: rotate(-135deg);
+}
+
+.size-settings-accordion summary:hover {
+    background: #f0f2f5;
+}
+
+.size-settings-accordion summary:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: -2px;
+}
+
+.size-settings-accordion .accordion-body {
+    padding: 0 var(--ui-space-md) var(--ui-space-md);
+}
+
+.size-settings-accordion .accordion-body > .row-2:first-child label {
+    margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .size-settings-accordion::details-content {
+        transition: none;
+    }
+
+    .size-settings-accordion summary::after {
+        transition: none;
+    }
 }
 
 .btn-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
+    gap: var(--ui-space-sm);
+    margin-top: var(--ui-space-md);
 }
 
 button {
     font-family: var(--font-ui);
-    font-size: 0.85rem;
-    padding: 7px 12px;
+    font-size: var(--ui-text);
+    line-height: 1.25;
+    padding: var(--ui-input-pad-y) var(--ui-space-md);
+    min-height: var(--ui-control-min-h);
     border: 1px solid #888;
-    border-radius: 4px;
+    border-radius: var(--ui-radius);
     background: #fff;
     cursor: pointer;
 }
@@ -158,7 +268,7 @@ button:hover { opacity: 0.88; }
     min-height: 0;
     min-width: 0;
     height: 100%;
-    padding: 20px;
+    padding: var(--ui-space-lg);
     overflow: hidden;
 }
 
@@ -167,27 +277,28 @@ button:hover { opacity: 0.88; }
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 12px;
-    margin-bottom: 8px;
+    gap: var(--ui-space-sm) var(--ui-space-md);
+    margin-bottom: var(--ui-space-sm);
 }
 
 .preview-label {
     margin: 0;
-    font-size: 0.8rem;
-    color: #666;
+    font-size: var(--ui-text-sm);
+    color: #555;
 }
 
 .preview-mode-label {
-    font-size: 0.78rem;
-    color: #555;
+    font-size: var(--ui-label);
+    color: #444;
 }
 
 .preview-mode-select {
     font-family: var(--font-ui);
-    font-size: 0.85rem;
+    font-size: var(--ui-text);
     border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 4px 8px;
+    border-radius: var(--ui-radius);
+    padding: var(--ui-input-pad-y) var(--ui-input-pad-x);
+    min-height: var(--ui-control-min-h);
     background: #fff;
 }
 
@@ -530,17 +641,18 @@ button:hover { opacity: 0.88; }
 }
 
 .parse-errors {
-    font-size: 0.75rem;
+    font-size: var(--ui-text-sm);
+    line-height: 1.5;
     color: #b45309;
     background: #fffbeb;
     border: 1px solid #fcd34d;
-    border-radius: 4px;
-    padding: 8px;
-    margin-top: 8px;
+    border-radius: var(--ui-radius);
+    padding: var(--ui-space-sm);
+    margin-top: var(--ui-space-sm);
 }
 
 .parse-errors p {
-    margin: 0 0 4px;
+    margin: 0 0 var(--ui-space-xs);
 }
 
 .parse-errors p:last-child {
@@ -549,7 +661,8 @@ button:hover { opacity: 0.88; }
 
 .empty-msg {
     writing-mode: horizontal-tb;
-    padding: 40px;
+    padding: var(--ui-space-lg);
+    font-size: var(--ui-text);
     text-align: center;
     color: #999;
 }

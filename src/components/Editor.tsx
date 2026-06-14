@@ -75,129 +75,138 @@ export function Editor({
         onChange={(e) => patch({ subtitle: e.target.value })}
       />
 
-      <div className="row-2">
-        <div>
-          <label htmlFor="bodySize">本文サイズ (pt)</label>
-          <select
-            id="bodySize"
-            value={settings.bodySize}
-            onChange={(e) => patch({ bodySize: Number(e.target.value) })}
-          >
-            {rangeOptions(6, 49, defaults.bodySize).map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="titleSize">表題サイズ (pt)</label>
-          <select
-            id="titleSize"
-            value={settings.titleSize}
-            onChange={(e) => patch({ titleSize: Number(e.target.value) })}
-          >
-            {rangeOptions(8, 36, defaults.titleSize).map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <details className="size-settings-accordion">
+        <summary>文字サイズ・余白</summary>
+        <div className="accordion-body">
+          <div className="row-2">
+            <div>
+              <label htmlFor="bodySize">本文サイズ (pt)</label>
+              <select
+                id="bodySize"
+                value={settings.bodySize}
+                onChange={(e) => patch({ bodySize: Number(e.target.value) })}
+              >
+                {rangeOptions(6, 49, defaults.bodySize).map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="titleSize">表題サイズ (pt)</label>
+              <select
+                id="titleSize"
+                value={settings.titleSize}
+                onChange={(e) => patch({ titleSize: Number(e.target.value) })}
+              >
+                {rangeOptions(8, 36, defaults.titleSize).map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-      <div className="row-2">
-        <div>
-          <label htmlFor="subtitleSize">説明サイズ (pt)</label>
-          <select
-            id="subtitleSize"
-            value={settings.subtitleSize}
-            onChange={(e) => patch({ subtitleSize: Number(e.target.value) })}
-          >
-            {rangeOptions(6, 36, defaults.subtitleSize).map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="nameSize">名前欄サイズ (pt)</label>
-          <select
-            id="nameSize"
-            value={settings.nameSize}
-            onChange={(e) => patch({ nameSize: Number(e.target.value) })}
-          >
-            {rangeOptions(6, 36, defaults.nameSize).map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+          <div className="row-2">
+            <div>
+              <label htmlFor="subtitleSize">説明サイズ (pt)</label>
+              <select
+                id="subtitleSize"
+                value={settings.subtitleSize}
+                onChange={(e) =>
+                  patch({ subtitleSize: Number(e.target.value) })
+                }
+              >
+                {rangeOptions(6, 36, defaults.subtitleSize).map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="nameSize">名前欄サイズ (pt)</label>
+              <select
+                id="nameSize"
+                value={settings.nameSize}
+                onChange={(e) => patch({ nameSize: Number(e.target.value) })}
+              >
+                {rangeOptions(6, 36, defaults.nameSize).map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-      <div className="row-2">
-        <div>
-          <label htmlFor="yomiSize">読み仮名サイズ (pt)</label>
-          <select
-            id="yomiSize"
-            value={settings.yomiSize}
-            onChange={(e) => patch({ yomiSize: Number(e.target.value) })}
-          >
-            {rangeOptions(4, 20, defaults.yomiSize).map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="boxScale">入力欄の大きさ (%)</label>
-          <select
-            id="boxScale"
-            value={settings.boxScale}
-            onChange={(e) => patch({ boxScale: Number(e.target.value) })}
-          >
-            {BOX_SCALE_OPTIONS.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+          <div className="row-2">
+            <div>
+              <label htmlFor="yomiSize">読み仮名サイズ (pt)</label>
+              <select
+                id="yomiSize"
+                value={settings.yomiSize}
+                onChange={(e) => patch({ yomiSize: Number(e.target.value) })}
+              >
+                {rangeOptions(4, 20, defaults.yomiSize).map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="boxScale">入力欄の大きさ (%)</label>
+              <select
+                id="boxScale"
+                value={settings.boxScale}
+                onChange={(e) => patch({ boxScale: Number(e.target.value) })}
+              >
+                {BOX_SCALE_OPTIONS.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-      <div className="row-2">
-        <div>
-          <label htmlFor="writeColGap">書き取り・列間余白 (mm)</label>
-          <select
-            id="writeColGap"
-            value={settings.writeColGap}
-            onChange={(e) => patch({ writeColGap: Number(e.target.value) })}
-          >
-            {COL_GAP_MM_OPTIONS.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
+          <div className="row-2">
+            <div>
+              <label htmlFor="writeColGap">書き取り・列間余白 (mm)</label>
+              <select
+                id="writeColGap"
+                value={settings.writeColGap}
+                onChange={(e) =>
+                  patch({ writeColGap: Number(e.target.value) })
+                }
+              >
+                {COL_GAP_MM_OPTIONS.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="readColGap">読み取り・列間余白 (mm)</label>
+              <select
+                id="readColGap"
+                value={settings.readColGap}
+                onChange={(e) => patch({ readColGap: Number(e.target.value) })}
+              >
+                {COL_GAP_MM_OPTIONS.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="readColGap">読み取り・列間余白 (mm)</label>
-          <select
-            id="readColGap"
-            value={settings.readColGap}
-            onChange={(e) => patch({ readColGap: Number(e.target.value) })}
-          >
-            {COL_GAP_MM_OPTIONS.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      </details>
 
       <label htmlFor="nameFormat">名前欄</label>
       <select

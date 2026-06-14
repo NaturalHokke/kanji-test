@@ -1,9 +1,13 @@
+import { suffixMatchLength } from "../parser/parse";
 import type { TokenSegment } from "../parser/types";
 
 type Props = { token: TokenSegment };
 
 export function TokenRead({ token }: Props) {
-  const { surface, readWidth, emphasis } = token;
+  const { surface, yomi, emphasis } = token;
+  const okuriganaLen = suffixMatchLength(surface, yomi);
+  const stem = okuriganaLen > 0 ? surface.slice(0, -okuriganaLen) : surface;
+  const okurigana = okuriganaLen > 0 ? surface.slice(-okuriganaLen) : "";
 
   return (
     <span
@@ -14,11 +18,10 @@ export function TokenRead({ token }: Props) {
         .filter(Boolean)
         .join(" ")}
     >
-      <span className="display-text surface">{surface}</span>
-      {readWidth > 0 &&
-        Array.from({ length: readWidth }, (_, i) => (
-          <span key={i} className="read-slot" />
-        ))}
+      <span className="display-text surface">{stem}</span>
+      {okurigana ? (
+        <span className="display-text okurigana">{okurigana}</span>
+      ) : null}
     </span>
   );
 }

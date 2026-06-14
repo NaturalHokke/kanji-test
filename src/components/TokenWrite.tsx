@@ -5,16 +5,6 @@ type Props = { token: TokenSegment };
 export function TokenWrite({ token }: Props) {
   const { yomi, writeWidth, lineStyle, emphasis } = token;
   const widthClass = writeWidth <= 6 ? `w-${writeWidth}` : "w-6";
-  const boxes =
-    writeWidth <= 1 ? (
-      <span className="kanji-box" />
-    ) : (
-      <span className="kanji-box-stack">
-        {Array.from({ length: writeWidth }, (_, i) => (
-          <span key={i} className="kanji-box kanji-box-unit" />
-        ))}
-      </span>
-    );
 
   return (
     <span
@@ -27,7 +17,7 @@ export function TokenWrite({ token }: Props) {
         .filter(Boolean)
         .join(" ")}
     >
-      {boxes}
+      <span className="kanji-box" />
       <rt className="display-text">{yomi}</rt>
     </span>
   );

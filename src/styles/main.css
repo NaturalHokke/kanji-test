@@ -329,21 +329,8 @@ button:hover { opacity: 0.88; }
     text-decoration-style: wavy;
 }
 
-.kanji-box-stack {
-    display: inline-flex;
-    flex-direction: column;
-    gap: 0.15em;
-}
-
-.kanji-box-unit {
-    height: calc(var(--body-size, 9pt) * 2.2 * var(--box-scale, 1)) !important;
-}
-
 .token-read {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.15em;
+    display: inline;
 }
 
 .token-read .surface.display-text {
@@ -351,17 +338,16 @@ button:hover { opacity: 0.88; }
     text-underline-offset: 0.15em;
 }
 
-.read-slot {
-    display: inline-block;
-    width: 1.8em;
-    height: calc(var(--body-size, 9pt) * 2.2 * var(--box-scale, 1));
-    border: var(--box-border);
-    background: #fff;
-    box-sizing: border-box;
+.token-read .okurigana.display-text {
+    text-decoration: none;
 }
 
 .token-answer {
     display: inline;
+}
+
+.token-answer .display-text {
+    color: red;
 }
 
 .token-emphasis-bold .display-text {

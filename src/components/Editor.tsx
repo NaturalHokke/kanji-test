@@ -8,23 +8,27 @@ import {
   type Orientation,
 } from "../constants";
 
-import type { ParseError } from "../parser/types";
+import type { ParseError, PreviewMode } from "../parser/types";
 
 type Props = {
   settings: SheetSettings;
   questions: string;
+  previewMode: PreviewMode;
   parseErrors: ParseError[];
   onSettingsChange: (settings: SheetSettings) => void;
   onQuestionsChange: (questions: string) => void;
+  onPreviewModeChange: (mode: PreviewMode) => void;
   onBuild: () => void;
 };
 
 export function Editor({
   settings,
   questions,
+  previewMode,
   parseErrors,
   onSettingsChange,
   onQuestionsChange,
+  onPreviewModeChange,
   onBuild,
 }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -205,6 +209,18 @@ export function Editor({
       >
         <option value="landscape">横向き（297×210 mm）</option>
         <option value="portrait">縦向き（210×297 mm）</option>
+      </select>
+
+      <label htmlFor="previewMode">プレビュー</label>
+      <select
+        id="previewMode"
+        value={previewMode}
+        onChange={(e) => onPreviewModeChange(e.target.value as PreviewMode)}
+      >
+        <option value="write">書き取り</option>
+        <option value="read">読み取り</option>
+        <option value="answer-write">書き解答</option>
+        <option value="answer-read">読み解答</option>
       </select>
 
       <label htmlFor="questions">問題（1行1問）</label>

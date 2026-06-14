@@ -1,6 +1,6 @@
 import { PER_PAGE, PER_TIER, CIRCLED } from "../constants";
 import type { SheetSettings } from "../constants";
-import type { ParseResult } from "../parser/types";
+import type { ParseResult, PreviewMode } from "../parser/types";
 import { SheetHeader } from "./SheetHeader";
 import { QuestionCol } from "./QuestionCol";
 
@@ -8,9 +8,10 @@ type Props = {
   pageQuestions: ParseResult[];
   pageIndex: number;
   settings: SheetSettings;
+  mode: PreviewMode;
 };
 
-export function Sheet({ pageQuestions, pageIndex, settings }: Props) {
+export function Sheet({ pageQuestions, pageIndex, settings, mode }: Props) {
   const tier1 = pageQuestions.slice(0, PER_TIER);
   const tier2 = pageQuestions.slice(PER_TIER, PER_PAGE);
 
@@ -22,7 +23,12 @@ export function Sheet({ pageQuestions, pageIndex, settings }: Props) {
           CIRCLED[globalIndex] ??
           String(pageIndex * PER_PAGE + globalIndex + 1);
         return (
-          <QuestionCol key={globalIndex} num={num} segments={q.segments} />
+          <QuestionCol
+            key={globalIndex}
+            num={num}
+            segments={q.segments}
+            mode={mode}
+          />
         );
       })}
     </div>

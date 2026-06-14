@@ -339,6 +339,31 @@ button:hover { opacity: 0.88; }
     height: calc(var(--body-size, 9pt) * 2.2 * var(--box-scale, 1)) !important;
 }
 
+.token-read {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15em;
+}
+
+.token-read .surface.display-text {
+    text-decoration: underline solid red;
+    text-underline-offset: 0.15em;
+}
+
+.read-slot {
+    display: inline-block;
+    width: 1.8em;
+    height: calc(var(--body-size, 9pt) * 2.2 * var(--box-scale, 1));
+    border: var(--box-border);
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.token-answer {
+    display: inline;
+}
+
 .parse-errors {
     font-size: 0.75rem;
     color: #b45309;

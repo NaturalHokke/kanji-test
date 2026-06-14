@@ -11,6 +11,13 @@ export const ORIENTATION_UI = {
   portrait: { label: "縦向き", preview: "A4 縦向き・縦書き" },
 } as const;
 
+export const PREVIEW_MODE_LABELS: Record<string, string> = {
+  write: "書き取り",
+  read: "読み取り",
+  "answer-write": "書き解答",
+  "answer-read": "読み解答",
+};
+
 export const DEFAULT_QUESTIONS =
   "「失敗｜しっぱい」を「許す｜ゆるす」";
 

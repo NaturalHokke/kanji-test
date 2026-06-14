@@ -7,11 +7,12 @@ import {
   type SheetSettings,
 } from "./constants";
 import { parseDocument } from "./parser";
-import type { ParseResult } from "./parser/types";
+import type { ParseResult, PreviewMode } from "./parser/types";
 
 export function App() {
   const [settings, setSettings] = useState<SheetSettings>(buildDefaultSettings);
   const [questions, setQuestions] = useState(DEFAULT_QUESTIONS);
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("write");
   const [builtLines, setBuiltLines] = useState<ParseResult[]>(() =>
     parseDocument(DEFAULT_QUESTIONS).lines,
   );
@@ -46,12 +47,14 @@ export function App() {
       <Editor
         settings={settings}
         questions={questions}
+        previewMode={previewMode}
         parseErrors={parseErrors}
         onSettingsChange={setSettings}
         onQuestionsChange={setQuestions}
+        onPreviewModeChange={setPreviewMode}
         onBuild={handleBuild}
       />
-      <Preview lines={builtLines} settings={settings} />
+      <Preview lines={builtLines} settings={settings} mode={previewMode} />
     </div>
   );
 }

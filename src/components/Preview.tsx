@@ -10,14 +10,14 @@ type Props = {
   lines: ParseResult[];
   settings: SheetSettings;
   mode: PreviewMode;
+  onModeChange: (mode: PreviewMode) => void;
 };
 
 const EMPTY_LAYOUT: LayoutResult = { layout: { pages: [] }, colGap: 0 };
 
-export function Preview({ lines, settings, mode }: Props) {
+export function Preview({ lines, settings, mode, onModeChange }: Props) {
   const orientation = settings.orientation;
   const orientUi = ORIENTATION_UI[orientation];
-  const modeLabel = PREVIEW_MODE_LABELS[mode] ?? mode;
   const [layoutResult, setLayoutResult] = useState<LayoutResult>(EMPTY_LAYOUT);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -38,9 +38,26 @@ export function Preview({ lines, settings, mode }: Props) {
 
   return (
     <main className="preview-wrap">
-      <p className="preview-label">
-        ↓ 印刷プレビュー（{orientUi.preview}・{modeLabel}）
-      </p>
+      <div className="preview-toolbar">
+        <p className="preview-label">
+          印刷プレビュー（{orientUi.preview}）
+        </p>
+        <label htmlFor="previewMode" className="preview-mode-label">
+          表示
+        </label>
+        <select
+          id="previewMode"
+          className="preview-mode-select"
+          value={mode}
+          onChange={(e) => onModeChange(e.target.value as PreviewMode)}
+        >
+          {(Object.keys(PREVIEW_MODE_LABELS) as PreviewMode[]).map((key) => (
+            <option key={key} value={key}>
+              {PREVIEW_MODE_LABELS[key]}
+            </option>
+          ))}
+        </select>
+      </div>
       {lines.length > 0 && (
         <LayoutMeasurer
           lines={lines}

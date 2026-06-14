@@ -46,6 +46,64 @@ body {
     margin: 10px 0 4px;
 }
 
+.field-label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0 4px;
+}
+
+.field-label-row label {
+    margin: 0;
+}
+
+.notation-help-trigger {
+    anchor-name: --notation-help-trigger;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0.72rem;
+    font-weight: bold;
+    line-height: 1;
+    border: 1px solid #aaa;
+    background: #f0f2f5;
+    color: #555;
+    cursor: help;
+    flex-shrink: 0;
+}
+
+.notation-help-trigger:hover,
+.notation-help-trigger:focus-visible {
+    opacity: 1;
+    background: #e8ebef;
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+}
+
+.notation-help-popover {
+    position: fixed;
+    inset: unset;
+    top: anchor(bottom);
+    left: anchor(left);
+    margin: 6px 0 0 0;
+    padding: 10px 12px;
+    width: min(18rem, calc(100vw - 24px));
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: #333;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.notation-help-popover code {
+    background: #eee;
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
 .sidebar input[type="text"],
 .sidebar select,
 .sidebar textarea {
@@ -94,22 +152,6 @@ button.primary {
 
 button:hover { opacity: 0.88; }
 
-.help {
-    font-size: 0.75rem;
-    color: #666;
-    line-height: 1.6;
-    margin-top: 10px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 4px;
-}
-
-.help code {
-    background: #eee;
-    padding: 1px 4px;
-    border-radius: 2px;
-}
-
 .preview-wrap {
     display: flex;
     flex-direction: column;
@@ -120,11 +162,33 @@ button:hover { opacity: 0.88; }
     overflow: hidden;
 }
 
-.preview-label {
+.preview-toolbar {
     flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-bottom: 8px;
+}
+
+.preview-label {
+    margin: 0;
     font-size: 0.8rem;
     color: #666;
-    margin-bottom: 8px;
+}
+
+.preview-mode-label {
+    font-size: 0.78rem;
+    color: #555;
+}
+
+.preview-mode-select {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    background: #fff;
 }
 
 /* プレビュー枠：幅にフィットさせ縦方向のみスクロール */
@@ -510,7 +574,7 @@ button:hover { opacity: 0.88; }
 @media print {
     body { background: #fff; }
     .editor { display: block; }
-    .sidebar, .preview-label { display: none !important; }
+    .sidebar, .preview-toolbar { display: none !important; }
     .preview-wrap {
         padding: 0;
         overflow: visible;

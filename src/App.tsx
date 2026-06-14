@@ -49,14 +49,17 @@ export function App() {
       <Editor
         settings={settings}
         questions={questions}
-        previewMode={previewMode}
         parseErrors={parseErrors}
         onSettingsChange={setSettings}
         onQuestionsChange={setQuestions}
-        onPreviewModeChange={setPreviewMode}
         onBuild={handleBuild}
       />
-      <Preview lines={builtLines} settings={settings} mode={previewMode} />
+      <Preview
+        lines={builtLines}
+        settings={settings}
+        mode={previewMode}
+        onModeChange={setPreviewMode}
+      />
     </div>
   );
 }

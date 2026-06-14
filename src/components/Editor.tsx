@@ -1,40 +1,43 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   BOX_SCALE_OPTIONS,
   COL_GAP_MM_OPTIONS,
-  ORIENTATION_UI,
   buildDefaultSettings,
   rangeOptions,
   type SheetSettings,
   type Orientation,
 } from "../constants";
 
-import type { ParseError, PreviewMode } from "../parser/types";
+import type { ParseError } from "../parser/types";
 
 type Props = {
   settings: SheetSettings;
   questions: string;
-  previewMode: PreviewMode;
   parseErrors: ParseError[];
   onSettingsChange: (settings: SheetSettings) => void;
   onQuestionsChange: (questions: string) => void;
-  onPreviewModeChange: (mode: PreviewMode) => void;
   onBuild: () => void;
 };
+
+const NOTATION_HELP_ID = "notation-help-text";
 
 export function Editor({
   settings,
   questions,
-  previewMode,
   parseErrors,
   onSettingsChange,
   onQuestionsChange,
-  onPreviewModeChange,
   onBuild,
 }: Props) {
-  const fileRef = useRef<HTMLInputElement>(null);
+  const notationHelpTriggerRef = useRef<HTMLButtonElement>(null);
   const defaults = buildDefaultSettings();
-  const orientUi = ORIENTATION_UI[settings.orientation];
+
+  useEffect(() => {
+    notationHelpTriggerRef.current?.setAttribute(
+      "interestfor",
+      NOTATION_HELP_ID,
+    );
+  }, []);
 
   const patch = (partial: Partial<SheetSettings>) =>
     onSettingsChange({ ...settings, ...partial });
@@ -50,24 +53,6 @@ export function Editor({
     }
     onQuestionsChange(lines.join("\n"));
     onBuild();
-  };
-
-  const saveTxt = () => {
-    const blob = new Blob([questions], { type: "text/plain;charset=utf-8" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "kanji-test-questions.txt";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
-
-  const loadFile = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      onQuestionsChange(String(reader.result ?? ""));
-      onBuild();
-    };
-    reader.readAsText(file, "UTF-8");
   };
 
   return (
@@ -243,19 +228,35 @@ export function Editor({
         <option value="portrait">縦向き（210×297 mm）</option>
       </select>
 
-      <label htmlFor="previewMode">プレビュー</label>
-      <select
-        id="previewMode"
-        value={previewMode}
-        onChange={(e) => onPreviewModeChange(e.target.value as PreviewMode)}
+      <div className="field-label-row">
+        <label htmlFor="questions">問題（1行1問）</label>
+        <button
+          ref={notationHelpTriggerRef}
+          type="button"
+          id="notation-help-trigger"
+          className="notation-help-trigger"
+          aria-label="記法の説明"
+          popoverTarget={NOTATION_HELP_ID}
+        >
+          ?
+        </button>
+      </div>
+      <div
+        id={NOTATION_HELP_ID}
+        popover="hint"
+        className="notation-help-popover"
       >
-        <option value="write">書き取り</option>
-        <option value="read">読み取り</option>
-        <option value="answer-write">書き解答</option>
-        <option value="answer-read">読み解答</option>
-      </select>
-
-      <label htmlFor="questions">問題（1行1問）</label>
+        <strong>記法</strong>
+        <br />
+        基本: <code>「表記｜読み」</code>
+        <br />
+        例: <code>「失敗｜しっぱい」を「許す｜ゆるす」</code>
+        <br />
+        太字: <code>『表記｜読み』</code>
+        <br />
+        半角: <code>&quot;表記|読み&quot;</code>{" "}
+        <code>&apos;表記|読み&apos;</code> も可
+      </div>
       <textarea
         id="questions"
         spellCheck={false}
@@ -283,44 +284,6 @@ export function Editor({
         <button type="button" onClick={() => window.print()}>
           印刷 / PDF
         </button>
-      </div>
-      <div className="btn-row">
-        <button type="button" onClick={saveTxt}>
-          保存
-        </button>
-        <button type="button" onClick={() => fileRef.current?.click()}>
-          読込
-        </button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept=".txt"
-          hidden
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) loadFile(file);
-            e.target.value = "";
-          }}
-        />
-      </div>
-
-      <div className="help">
-        <strong>記法</strong>
-        <br />
-        基本: <code>「表記｜読み」</code>
-        <br />
-        例: <code>「失敗｜しっぱい」を「許す｜ゆるす」</code>
-        <br />
-        太字: <code>『表記｜読み』</code>
-        <br />
-        半角: <code>&quot;表記|読み&quot;</code> <code>&apos;表記|読み&apos;</code> も可
-        <br />
-        <br />
-        問題文の長さに応じて段組み・ページ送りが自動調整されます（A4 {orientUi.label}）。
-        <br />
-        印刷時は倍率 85〜90% で調整できます。
-        <br />
-        書体：<strong>UD明朝</strong>（未インストール時は BIZ UDPMincho）
       </div>
     </aside>
   );

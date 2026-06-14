@@ -1,102 +1,30 @@
 <!DOCTYPE html>
+
 <html lang="ja">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>漢字テスト作成（縦書き）</title>
-    <!-- BIZ UDPMincho = UD明朝のオープン版。ローカルに UD 明朝 があれば優先 -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPMincho&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
-    <div class="editor">
-        <aside class="sidebar">
-            <h1>漢字テスト作成</h1>
 
-            <label for="title">表題</label>
-            <input type="text" id="title" value="漢字テスト">
+    <div id="root"></div>
 
-            <label for="subtitle">説明</label>
-            <input type="text" id="subtitle" value="線を引いた部分を漢字（漢字と送り仮名）で書きましょう。">
+    <script type="module" src="/src/main.tsx"></script>
 
-            <div class="row-2">
-                <div>
-                    <label for="bodySize">本文サイズ (pt)</label>
-                    <select id="bodySize"></select>
-                </div>
-                <div>
-                    <label for="titleSize">表題サイズ (pt)</label>
-                    <select id="titleSize"></select>
-                </div>
-            </div>
-            <div class="row-2">
-                <div>
-                    <label for="subtitleSize">説明サイズ (pt)</label>
-                    <select id="subtitleSize"></select>
-                </div>
-                <div>
-                    <label for="nameSize">名前欄サイズ (pt)</label>
-                    <select id="nameSize"></select>
-                </div>
-            </div>
-
-            <div class="row-2">
-                <div>
-                    <label for="yomiSize">読み仮名サイズ (pt)</label>
-                    <select id="yomiSize"></select>
-                </div>
-                <div>
-                    <label for="boxScale">入力欄の大きさ (%)</label>
-                    <select id="boxScale"></select>
-                </div>
-            </div>
-
-            <label for="nameFormat">名前欄</label>
-            <select id="nameFormat">
-                <option value="kanji">年　　組　　名前（　　　　　　　　　　）</option>
-                <option value="hiragana">ねん　　くみ　　なまえ（　　　　　　　　　　　　）</option>
-            </select>
-
-            <label for="pageOrientation">印刷仕様（A4）</label>
-            <select id="pageOrientation">
-                <option value="landscape">横向き（297×210 mm）</option>
-                <option value="portrait" selected>縦向き（210×297 mm）</option>
-            </select>
-
-            <label for="questions">問題（1行1問）</label>
-            <textarea id="questions" spellcheck="false"></textarea>
-
-            <div class="btn-row">
-                <button type="button" class="primary" id="btnBuild">作成</button>
-                <button type="button" id="btnShuffle">シャッフル</button>
-                <button type="button" id="btnPrint">印刷 / PDF</button>
-            </div>
-            <div class="btn-row">
-                <button type="button" id="btnSave">保存</button>
-                <button type="button" id="btnLoad">読込</button>
-                <input type="file" id="fileLoad" accept=".txt" hidden>
-            </div>
-
-            <div class="help">
-                <strong>記法</strong><br>
-                解答枠：<code>@(よみ,文字数)@</code><br>
-                例：<code>@(きもち,2)@</code> → 読み「きもち」の2マス枠<br>
-                文字数省略：<code>@(きもち)@</code> → 読みの文字数で自動<br>
-                読み省略：<code>@(,2)@</code> または <code>@(2)@</code><br>
-                <br>
-                1ページ <strong>20問</strong>（10問×2段・A4 <span id="helpOrientation">横向き</span>）。21問目以降は次ページへ。<br>
-                印刷時は倍率 85〜90% で調整できます。<br>
-                書体：<strong>UD明朝</strong>（未インストール時は BIZ UDPMincho）
-            </div>
-        </aside>
-
-        <main class="preview-wrap">
-            <p class="preview-label" id="previewLabel">↓ 印刷プレビュー（A4 横向き・縦書き）</p>
-            <div id="print-root"></div>
-        </main>
-    </div>
-
-    <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>
+

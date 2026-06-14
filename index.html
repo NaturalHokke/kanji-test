@@ -54,8 +54,14 @@
 
             <label for="nameFormat">名前欄</label>
             <select id="nameFormat">
-                <option value="kanji">年　　組　　名前（　　　　）</option>
-                <option value="hiragana">ねん　　くみ　　なまえ（　　　　）</option>
+                <option value="kanji">年　　組　　名前（　　　　　　　　　　）</option>
+                <option value="hiragana">ねん　　くみ　　なまえ（　　　　　　　　　　　　）</option>
+            </select>
+
+            <label for="pageOrientation">印刷仕様（A4）</label>
+            <select id="pageOrientation">
+                <option value="landscape">横向き（297×210 mm）</option>
+                <option value="portrait" selected>縦向き（210×297 mm）</option>
             </select>
 
             <label for="questions">問題（1行1問）</label>
@@ -79,14 +85,14 @@
                 文字数省略：<code>@(きもち)@</code> → 読みの文字数で自動<br>
                 読み省略：<code>@(,2)@</code> または <code>@(2)@</code><br>
                 <br>
-                1ページ <strong>20問</strong>（10問×2段・A4 横向き）。21問目以降は次ページへ。<br>
+                1ページ <strong>20問</strong>（10問×2段・A4 <span id="helpOrientation">横向き</span>）。21問目以降は次ページへ。<br>
                 印刷時は倍率 85〜90% で調整できます。<br>
                 書体：<strong>UD明朝</strong>（未インストール時は BIZ UDPMincho）
             </div>
         </aside>
 
         <main class="preview-wrap">
-            <p class="preview-label">↓ 印刷プレビュー（A4 横・縦書き）</p>
+            <p class="preview-label" id="previewLabel">↓ 印刷プレビュー（A4 横向き・縦書き）</p>
             <div id="print-root"></div>
         </main>
     </div>

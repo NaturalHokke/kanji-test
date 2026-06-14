@@ -120,7 +120,7 @@ button:hover { opacity: 0.88; }
     margin-bottom: 8px;
 }
 
-/* ===== 印刷プレビュー（A4 横向き） ===== */
+/* ===== 印刷プレビュー（A4） ===== */
 #print-root {
     background: #fff;
     box-shadow: 0 2px 12px rgba(0,0,0,0.12);
@@ -128,14 +128,24 @@ button:hover { opacity: 0.88; }
     width: 297mm;
 }
 
-@page {
+#print-root[data-orientation="portrait"] {
+    width: 210mm;
+}
+
+@page landscape-page {
     size: A4 landscape;
+    margin: 5mm 5mm;
+}
+
+@page portrait-page {
+    size: A4 portrait;
     margin: 5mm 5mm;
 }
 
 .sheet {
     width: 297mm;
     height: 210mm;
+    page: landscape-page;
     padding: var(--sheet-pad, 6mm) var(--sheet-pad-x, 8mm);
     page-break-after: always;
     font-family: var(--font-print);
@@ -154,6 +164,12 @@ button:hover { opacity: 0.88; }
     --gap-yomi: 0.9mm;
     --width-yomi-lane: 4mm;
     --height-q-head: 5mm;
+}
+
+.sheet[data-orientation="portrait"] {
+    width: 210mm;
+    height: 297mm;
+    page: portrait-page;
 }
 
 .sheet:last-child {
@@ -261,13 +277,13 @@ button:hover { opacity: 0.88; }
 }
 
 .q-text-inner {
-    grid-column: 1;
-    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-num-text, 1mm);
     writing-mode: vertical-rl;
     text-orientation: mixed;
     font-size: var(--body-size, 9pt);
     letter-spacing: 0.06em;
-    text-align: center;
 }
 
 /* 解答枠 + 読み仮名：ruby / rt */
@@ -278,7 +294,7 @@ button:hover { opacity: 0.88; }
 
 .blank-ruby .kanji-box {
     display: inline-block;
-    width: 1.7em;
+    width: 1.8em;
     border: var(--box-border);
     background: #fff;
     box-sizing: border-box;
@@ -294,12 +310,14 @@ button:hover { opacity: 0.88; }
 .blank-ruby rt {
     position: absolute;
     display: flex;
-    height: 100%;
-    right: -1.1em;
+    right: 0;
+    top: 1em;
+    margin-right: -1.3em;
     justify-content: center;
     color: #333;
     font-size: var(--yomi-size, 5pt);
     font-family: var(--font-print);
+    letter-spacing: 0.3em;
 }
 
 .empty-msg {
@@ -321,8 +339,13 @@ button:hover { opacity: 0.88; }
         box-shadow: none;
         width: auto;
     }
-    .sheet {
+    .sheet[data-orientation="landscape"],
+    .sheet:not([data-orientation]) {
         width: 297mm;
         height: 210mm;
+    }
+    .sheet[data-orientation="portrait"] {
+        width: 210mm;
+        height: 297mm;
     }
 }

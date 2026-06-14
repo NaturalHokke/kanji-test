@@ -2,10 +2,20 @@ import "./styles/main.css";
 
 const PER_PAGE = 20;
 const PER_TIER = 10;
+
+const ORIENTATION_UI = {
+    landscape: { label: "横向き", preview: "A4 横向き・縦書き" },
+    portrait: { label: "縦向き", preview: "A4 縦向き・縦書き" },
+};
+
 const CIRCLED = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩",
                  "⑪","⑫","⑬","⑭","⑮","⑯","⑰","⑱","⑲","⑳"];
 
 const $ = (id) => document.getElementById(id);
+
+function getOrientation() {
+    return $("pageOrientation").value === "portrait" ? "portrait" : "landscape";
+}
 
 function fillSizeSelect(id, min, max, defaultVal) {
     const sel = $(id);
@@ -19,11 +29,11 @@ function fillSizeSelect(id, min, max, defaultVal) {
     }
 }
 
-fillSizeSelect("bodySize", 6, 49, 18);
+fillSizeSelect("bodySize", 6, 49, 20);
 fillSizeSelect("titleSize", 8, 36, 16);
-fillSizeSelect("subtitleSize", 6, 36, 12);
-fillSizeSelect("nameSize", 6, 36, 12);
-fillSizeSelect("yomiSize", 4, 20, 8);
+fillSizeSelect("subtitleSize", 6, 36, 10);
+fillSizeSelect("nameSize", 6, 36, 14);
+fillSizeSelect("yomiSize", 4, 20, 9);
 
 (function fillBoxScale() {
     const sel = $("boxScale");
@@ -31,7 +41,7 @@ fillSizeSelect("yomiSize", 4, 20, 8);
         const opt = document.createElement("option");
         opt.value = String(n);
         opt.textContent = String(n);
-        if (n === 130) opt.selected = true;
+        if (n === 100) opt.selected = true;
         sel.appendChild(opt);
     });
 })();
@@ -108,6 +118,7 @@ function buildTier(tierQuestions, tierStartIndex, pageIndex) {
 function buildSheet(pageQuestions, pageIndex, settings) {
     const sheet = document.createElement("div");
     sheet.className = "sheet";
+    sheet.dataset.orientation = settings.orientation;
     sheet.style.setProperty("--body-size", settings.bodySize + "pt");
     sheet.style.setProperty("--title-size", settings.titleSize + "pt");
     sheet.style.setProperty("--subtitle-size", settings.subtitleSize + "pt");
@@ -152,8 +163,18 @@ function buildSheet(pageQuestions, pageIndex, settings) {
     return sheet;
 }
 
+function updateOrientationUi(orientation) {
+    const ui = ORIENTATION_UI[orientation];
+    $("helpOrientation").textContent = ui.label;
+    $("previewLabel").textContent = `↓ 印刷プレビュー（${ui.preview}）`;
+}
+
 function render() {
+    const orientation = getOrientation();
+    updateOrientationUi(orientation);
+
     const settings = {
+        orientation,
         title: $("title").value.trim() || "漢字テスト",
         subtitle: $("subtitle").value.trim(),
         nameLine: $("nameFormat").value === "hiragana"
@@ -170,6 +191,7 @@ function render() {
 
     const questions = getQuestions();
     const root = $("print-root");
+    root.dataset.orientation = orientation;
     root.innerHTML = "";
 
     if (questions.length === 0) {
@@ -219,7 +241,7 @@ $("fileLoad").addEventListener("change", (e) => {
     e.target.value = "";
 });
 
-["title", "subtitle", "bodySize", "titleSize", "subtitleSize", "nameSize", "yomiSize", "boxScale", "nameFormat"].forEach(id => {
+["title", "subtitle", "bodySize", "titleSize", "subtitleSize", "nameSize", "yomiSize", "boxScale", "nameFormat", "pageOrientation"].forEach(id => {
     $(id).addEventListener("change", render);
 });
 

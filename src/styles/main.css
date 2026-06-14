@@ -685,16 +685,31 @@ button:hover { opacity: 0.88; }
 }
 
 @media print {
+    html, body {
+        height: auto;
+        overflow: visible;
+    }
+
     body { background: #fff; }
-    .editor { display: block; }
-    .sidebar, .preview-toolbar { display: none !important; }
+
+    .editor {
+        display: block;
+        height: auto;
+        overflow: visible;
+    }
+
+    .sidebar, .preview-toolbar, .layout-measurer { display: none !important; }
+
     .preview-wrap {
         padding: 0;
+        height: auto;
         overflow: visible;
     }
 
     .preview-scroll {
         overflow: visible;
+        flex: none;
+        height: auto;
     }
 
     .preview-scale-host {

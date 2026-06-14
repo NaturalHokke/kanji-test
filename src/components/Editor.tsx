@@ -284,7 +284,7 @@ export function Editor({
         半角: <code>&quot;表記|読み&quot;</code> <code>&apos;表記|読み&apos;</code> も可
         <br />
         <br />
-        1ページ <strong>20問</strong>（10問×2段・A4 {orientUi.label}）。21問目以降は次ページへ。
+        問題文の長さに応じて段組み・ページ送りが自動調整されます（A4 {orientUi.label}）。
         <br />
         印刷時は倍率 85〜90% で調整できます。
         <br />

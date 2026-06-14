@@ -1,6 +1,3 @@
-export const PER_PAGE = 20;
-export const PER_TIER = 10;
-
 export const CIRCLED = [
   "①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩",
   "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳",
@@ -49,7 +46,7 @@ export function buildDefaultSettings(): SheetSettings {
     nameSize: 14,
     yomiSize: 9,
     boxScale: 100,
-    colGap: Math.max(2, Math.min(6, Math.round(52 / PER_TIER * 10) / 10)),
+    colGap: 3,
   };
 }
 

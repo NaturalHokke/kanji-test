@@ -1,39 +1,21 @@
-import { PER_PAGE, PER_TIER, CIRCLED } from "../constants";
+import { CIRCLED } from "../constants";
 import type { SheetSettings } from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { SheetHeader } from "./SheetHeader";
 import { QuestionCol } from "./QuestionCol";
 
 type Props = {
-  pageQuestions: ParseResult[];
-  pageIndex: number;
+  tiers: number[][];
+  lines: ParseResult[];
   settings: SheetSettings;
   mode: PreviewMode;
 };
 
-export function Sheet({ pageQuestions, pageIndex, settings, mode }: Props) {
-  const tier1 = pageQuestions.slice(0, PER_TIER);
-  const tier2 = pageQuestions.slice(PER_TIER, PER_PAGE);
+function questionNum(globalIndex: number): string {
+  return CIRCLED[globalIndex] ?? String(globalIndex + 1);
+}
 
-  const renderTier = (tier: ParseResult[], tierStart: number) => (
-    <div className="q-tier">
-      {tier.map((q, i) => {
-        const globalIndex = tierStart + i;
-        const num =
-          CIRCLED[globalIndex] ??
-          String(pageIndex * PER_PAGE + globalIndex + 1);
-        return (
-          <QuestionCol
-            key={globalIndex}
-            num={num}
-            segments={q.segments}
-            mode={mode}
-          />
-        );
-      })}
-    </div>
-  );
-
+export function Sheet({ tiers, lines, settings, mode }: Props) {
   return (
     <div
       className="sheet"
@@ -53,8 +35,18 @@ export function Sheet({ pageQuestions, pageIndex, settings, mode }: Props) {
       <div className="sheet-layout">
         <SheetHeader settings={settings} />
         <div className="questions-area">
-          {tier1.length > 0 && renderTier(tier1, 0)}
-          {tier2.length > 0 && renderTier(tier2, PER_TIER)}
+          {tiers.map((tier, ti) => (
+            <div key={ti} className="q-tier">
+              {tier.map((lineIndex) => (
+                <QuestionCol
+                  key={lineIndex}
+                  num={questionNum(lineIndex)}
+                  segments={lines[lineIndex].segments}
+                  mode={mode}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>

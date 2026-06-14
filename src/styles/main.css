@@ -245,24 +245,42 @@ button:hover { opacity: 0.88; }
     letter-spacing: 0.18em;
 }
 
-/* ── 問題エリア：動的段組み ── */
+/* ── 問題エリア：幅は動的詰め込み、高さは向きで固定段数・均等割り ── */
 .questions-area {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     flex: 1;
     min-width: 0;
     height: 100%;
-    gap: var(--gap-tier, 10mm);
-    justify-content: flex-start;
-    row-rule: var(--tier-row-rule);
+}
+
+/* 2 段時は行を均等割りし、段間 gap の中央に罫線 */
+.questions-area:has(> .q-tier:nth-child(2)) {
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    row-gap: var(--gap-tier, 10mm);
+}
+
+.questions-area:has(> .q-tier:nth-child(2)) > .q-tier + .q-tier {
+    position: relative;
+}
+
+.questions-area:has(> .q-tier:nth-child(2)) > .q-tier + .q-tier::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(-0.5 * var(--gap-tier, 10mm));
+    height: 0;
+    border-top: var(--tier-row-rule);
+    pointer-events: none;
 }
 
 .q-tier {
     display: flex;
     flex-direction: row-reverse;
-    flex: 0 0 auto;
-    gap: var(--gap-col, var(--gap-col-alpha, 1mm));
     min-height: 0;
+    gap: var(--gap-col, var(--gap-col-alpha, 1mm));
     align-items: stretch;
 }
 

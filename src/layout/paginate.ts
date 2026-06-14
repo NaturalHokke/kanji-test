@@ -1,26 +1,17 @@
 export type QuestionMeasure = {
   index: number;
   width: number;
-  height: number;
 };
 
 export type PaginateOptions = {
   availableWidth: number;
-  availableHeight: number;
   colGap: number;
-  tierGap: number;
+  tiersPerPage: number;
 };
 
 export type PageLayout = {
   pages: number[][][];
 };
-
-function tierHeight(
-  tier: number[],
-  byIndex: Map<number, QuestionMeasure>,
-): number {
-  return Math.max(...tier.map((i) => byIndex.get(i)?.height ?? 0));
-}
 
 export function packQuestionsIntoTiers(
   measures: QuestionMeasure[],
@@ -51,34 +42,17 @@ export function packQuestionsIntoTiers(
   return tiers;
 }
 
+/** 段をページに分割（段数は向きで固定、高さは CSS で均等割り） */
 export function packTiersIntoPages(
   tiers: number[][],
-  byIndex: Map<number, QuestionMeasure>,
-  availableHeight: number,
-  tierGap: number,
+  tiersPerPage: number,
 ): number[][][] {
-  if (tiers.length === 0) return [];
+  if (tiers.length === 0 || tiersPerPage < 1) return [];
 
   const pages: number[][][] = [];
-  let currentPage: number[][] = [];
-  let usedHeight = 0;
-
-  for (const tier of tiers) {
-    const h = tierHeight(tier, byIndex);
-    const gap = currentPage.length > 0 ? tierGap : 0;
-    const nextHeight = usedHeight + gap + h;
-
-    if (currentPage.length > 0 && nextHeight > availableHeight) {
-      pages.push(currentPage);
-      currentPage = [tier];
-      usedHeight = h;
-    } else {
-      currentPage.push(tier);
-      usedHeight = nextHeight;
-    }
+  for (let i = 0; i < tiers.length; i += tiersPerPage) {
+    pages.push(tiers.slice(i, i + tiersPerPage));
   }
-
-  if (currentPage.length > 0) pages.push(currentPage);
   return pages;
 }
 
@@ -86,17 +60,11 @@ export function paginate(
   measures: QuestionMeasure[],
   options: PaginateOptions,
 ): PageLayout {
-  const byIndex = new Map(measures.map((m) => [m.index, m]));
   const tiers = packQuestionsIntoTiers(
     measures,
     options.availableWidth,
     options.colGap,
   );
-  const pages = packTiersIntoPages(
-    tiers,
-    byIndex,
-    options.availableHeight,
-    options.tierGap,
-  );
+  const pages = packTiersIntoPages(tiers, options.tiersPerPage);
   return { pages };
 }

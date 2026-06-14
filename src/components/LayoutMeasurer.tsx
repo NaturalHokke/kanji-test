@@ -1,5 +1,10 @@
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
-import { colGapAlphaMm, layoutModeForPreview, type SheetSettings } from "../constants";
+import {
+  colGapAlphaMm,
+  layoutModeForPreview,
+  tiersPerPageForOrientation,
+  type SheetSettings,
+} from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { measureColGap } from "../layout/measureColGap";
 import { paginate, type PageLayout } from "../layout/paginate";
@@ -55,14 +60,10 @@ export function LayoutMeasurer({ lines, settings, mode, onLayout }: Props) {
     const sheetStyle = getComputedStyle(sheet);
     const padX =
       parseFloat(sheetStyle.paddingLeft) + parseFloat(sheetStyle.paddingRight);
-    const padY =
-      parseFloat(sheetStyle.paddingTop) + parseFloat(sheetStyle.paddingBottom);
     const layoutGap = parseFloat(getComputedStyle(sheetLayout).gap) || 0;
-    const tierGap = parseFloat(getComputedStyle(questionsArea).gap) || 0;
 
     const availableWidth =
       sheet.clientWidth - padX - header.getBoundingClientRect().width - layoutGap;
-    const availableHeight = sheet.clientHeight - padY;
 
     const measures = lines.map((_, i) => {
       const host = colRefs.current[i];
@@ -71,16 +72,14 @@ export function LayoutMeasurer({ lines, settings, mode, onLayout }: Props) {
       return {
         index: i,
         width: rect?.width ?? 0,
-        height: rect?.height ?? 0,
       };
     });
 
     onLayout({
       layout: paginate(measures, {
         availableWidth,
-        availableHeight,
         colGap,
-        tierGap,
+        tiersPerPage: tiersPerPageForOrientation(settings.orientation),
       }),
       colGap,
     });

@@ -34,6 +34,11 @@ export type SheetSettings = {
 
 export type LayoutMode = "write" | "read";
 
+/** 1 ページあたりの段数（縦向き 2 段・横向き 1 段） */
+export function tiersPerPageForOrientation(orientation: Orientation): number {
+  return orientation === "portrait" ? 2 : 1;
+}
+
 /** 版組計測・列 gap に使うモード（解答は対応する問題形式に合わせる） */
 export function layoutModeForPreview(mode: PreviewMode): LayoutMode {
   if (mode === "read" || mode === "answer-read") return "read";

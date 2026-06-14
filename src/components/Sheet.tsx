@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { colGapAlphaMm, type SheetSettings } from "../constants";
+import { colGapAlphaMm, layoutModeForPreview, type SheetSettings } from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { SheetHeader } from "./SheetHeader";
 import { QuestionCol } from "./QuestionCol";
@@ -21,6 +21,7 @@ function enumerateSheetQuestions(tiers: number[][]): { lineIndex: number; num: n
 
 export function Sheet({ tiers, lines, settings, mode, colGap }: Props) {
   const numberedTiers = enumerateSheetQuestions(tiers);
+  const layoutMode = layoutModeForPreview(mode);
 
   const sheetStyle = {
     "--body-size": `${settings.bodySize}pt`,
@@ -37,7 +38,7 @@ export function Sheet({ tiers, lines, settings, mode, colGap }: Props) {
     <div
       className="sheet"
       data-orientation={settings.orientation}
-      data-preview-mode={mode}
+      data-preview-mode={layoutMode}
       style={sheetStyle}
     >
       <div className="sheet-layout">

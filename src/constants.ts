@@ -32,12 +32,20 @@ export type SheetSettings = {
   readColGap: number;
 };
 
+export type LayoutMode = "write" | "read";
+
+/** 版組計測・列 gap に使うモード（解答は対応する問題形式に合わせる） */
+export function layoutModeForPreview(mode: PreviewMode): LayoutMode {
+  if (mode === "read" || mode === "answer-read") return "read";
+  return "write";
+}
+
 /** 列 gap の α（mm）。書き取り・読み取りで別設定 */
 export function colGapAlphaMm(
   settings: SheetSettings,
   mode: PreviewMode,
 ): number {
-  if (mode === "read" || mode === "answer-read") return settings.readColGap;
+  if (layoutModeForPreview(mode) === "read") return settings.readColGap;
   return settings.writeColGap;
 }
 

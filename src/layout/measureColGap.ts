@@ -1,3 +1,5 @@
+import type { LayoutMode } from "../constants";
+import { layoutModeForPreview } from "../constants";
 import type { PreviewMode } from "../parser/types";
 
 /** mm / pt 等の CSS 長さを px に換算する */
@@ -21,16 +23,13 @@ export function cssLengthToPx(
   return px;
 }
 
-/** 計測値が取れないときの列 gap 用フォールバック */
+/** 列 gap = レーン幅 + α（版組は write / read 基準） */
 export function computeColGapPx(
-  mode: PreviewMode,
+  layoutMode: LayoutMode,
   alphaPx: number,
   laneWidthPx: number,
 ): number {
-  if (mode === "write" || mode === "read") {
-    return laneWidthPx + alphaPx;
-  }
-  return alphaPx;
+  return laneWidthPx + alphaPx;
 }
 
 function readAlphaPx(sheet: HTMLElement): number {
@@ -54,18 +53,23 @@ function fallbackYomiLaneWidthPx(sheet: HTMLElement): number {
   return cssLengthToPx(sheet, yomi);
 }
 
-function laneWidthForMode(sheet: HTMLElement, mode: PreviewMode): number {
+function laneWidthForLayout(
+  sheet: HTMLElement,
+  layoutMode: LayoutMode,
+): number {
   const selector =
-    mode === "write" ? "rt.display-text" : ".read-yomi-lane";
+    layoutMode === "write" ? "rt.display-text" : ".read-yomi-lane";
   const measured = maxElementWidth(sheet, selector);
   return measured || fallbackYomiLaneWidthPx(sheet);
 }
 
-/** 書き取り: max(rt 幅)+α、読み取り: max(読み記入レーン幅)+α、その他: α のみ */
+/** 書き: max(rt 幅)+α、読み: max(読み記入レーン幅)+α（解答モードも同版組） */
 export function measureColGap(sheet: HTMLElement, mode: PreviewMode): number {
+  const layoutMode = layoutModeForPreview(mode);
   const alpha = readAlphaPx(sheet);
-  if (mode === "write" || mode === "read") {
-    return computeColGapPx(mode, alpha, laneWidthForMode(sheet, mode));
-  }
-  return alpha;
+  return computeColGapPx(
+    layoutMode,
+    alpha,
+    laneWidthForLayout(sheet, layoutMode),
+  );
 }

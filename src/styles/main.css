@@ -365,6 +365,29 @@ button:hover { opacity: 0.88; }
     text-decoration-style: wavy;
 }
 
+/* 書き解答：枠・ルビレーンは書き取りと同寸、枠内に解答を表示 */
+.blank-ruby-answer .kanji-box {
+    border-color: transparent;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.blank-ruby-answer .kanji-box .display-text {
+    color: red;
+}
+
+.blank-ruby rt.write-yomi-lane {
+    width: 1em;
+    height: 1em;
+    visibility: hidden;
+    pointer-events: none;
+    text-decoration: none;
+}
+
 .token-read {
     position: relative;
     display: inline-block;

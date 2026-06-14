@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
-import { colGapAlphaMm, type SheetSettings } from "../constants";
+import { colGapAlphaMm, layoutModeForPreview, type SheetSettings } from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { measureColGap } from "../layout/measureColGap";
 import { paginate, type PageLayout } from "../layout/paginate";
@@ -88,13 +88,15 @@ export function LayoutMeasurer({ lines, settings, mode, onLayout }: Props) {
 
   if (lines.length === 0) return null;
 
+  const layoutMode = layoutModeForPreview(mode);
+
   return (
     <div className="layout-measurer" aria-hidden>
       <div
         ref={sheetRef}
         className="sheet"
         data-orientation={settings.orientation}
-        data-preview-mode={mode}
+        data-preview-mode={layoutMode}
         style={sheetCssVars(settings, mode)}
       >
         <div className="sheet-layout">
@@ -109,7 +111,7 @@ export function LayoutMeasurer({ lines, settings, mode, onLayout }: Props) {
                   }}
                   className="measure-col-host"
                 >
-                  <QuestionCol num={1} segments={line.segments} mode={mode} />
+                  <QuestionCol num={1} segments={line.segments} mode={layoutMode} />
                 </div>
               ))}
             </div>

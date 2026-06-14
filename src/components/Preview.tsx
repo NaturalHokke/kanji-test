@@ -2,8 +2,7 @@ import { useCallback, useState } from "react";
 import { ORIENTATION_UI, PREVIEW_MODE_LABELS } from "../constants";
 import type { SheetSettings } from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
-import type { PageLayout } from "../layout/paginate";
-import { LayoutMeasurer } from "./LayoutMeasurer";
+import { LayoutMeasurer, type LayoutResult } from "./LayoutMeasurer";
 import { Sheet } from "./Sheet";
 
 type Props = {
@@ -12,14 +11,16 @@ type Props = {
   mode: PreviewMode;
 };
 
+const EMPTY_LAYOUT: LayoutResult = { layout: { pages: [] }, colGap: 0 };
+
 export function Preview({ lines, settings, mode }: Props) {
   const orientation = settings.orientation;
   const orientUi = ORIENTATION_UI[orientation];
   const modeLabel = PREVIEW_MODE_LABELS[mode] ?? mode;
-  const [layout, setLayout] = useState<PageLayout>({ pages: [] });
+  const [layoutResult, setLayoutResult] = useState<LayoutResult>(EMPTY_LAYOUT);
 
-  const handleLayout = useCallback((next: PageLayout) => {
-    setLayout(next);
+  const handleLayout = useCallback((next: LayoutResult) => {
+    setLayoutResult(next);
   }, []);
 
   if (lines.length === 0) {
@@ -47,13 +48,14 @@ export function Preview({ lines, settings, mode }: Props) {
         onLayout={handleLayout}
       />
       <div id="print-root" data-orientation={orientation}>
-        {layout.pages.map((pageTiers, pi) => (
+        {layoutResult.layout.pages.map((pageTiers, pi) => (
           <Sheet
             key={pi}
             tiers={pageTiers}
             lines={lines}
             settings={settings}
             mode={mode}
+            colGap={layoutResult.colGap}
           />
         ))}
       </div>

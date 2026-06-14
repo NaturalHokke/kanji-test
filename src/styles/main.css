@@ -168,7 +168,7 @@ button:hover { opacity: 0.88; }
     --gap-header-col: 4mm;
     --gap-header-block: 6mm;
     --gap-tier: 5mm;
-    --gap-col: 3mm;
+    --gap-col-alpha: 1mm;
     --gap-sheet: 16px;
     --tier-row-rule: 1px solid #111;
     --gap-num-text: 1mm;
@@ -261,9 +261,14 @@ button:hover { opacity: 0.88; }
     display: flex;
     flex-direction: row-reverse;
     flex: 0 0 auto;
-    gap: var(--gap-col, 3mm);
+    gap: var(--gap-col, var(--gap-col-alpha, 1mm));
     min-height: 0;
     align-items: stretch;
+}
+
+/* 計測前のフォールバック（書き取り） */
+.sheet[data-preview-mode="write"] .q-tier {
+    gap: var(--gap-col, calc(var(--yomi-size, 5pt) + var(--gap-col-alpha, 1mm)));
 }
 
 /* ── 1問：Flex 列（番号 → 本文） ── */
@@ -278,9 +283,26 @@ button:hover { opacity: 0.88; }
 }
 
 .q-num {
-    font-size: calc(var(--body-size, 9pt) * 0.82);
+    --q-num-size: 1.8em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--q-num-size);
+    height: var(--q-num-size);
+    border: 1.5px solid currentColor;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    font-size: calc(var(--body-size, 9pt) * 0.5);
     font-weight: bold;
     font-family: Arial, sans-serif;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    letter-spacing: 0;
+    line-height: 1;
+}
+
+.q-num-inner {
+    display: block;
 }
 
 /* 本文列 + 読み仮名レーン */
@@ -308,7 +330,7 @@ button:hover { opacity: 0.88; }
 
 .blank-ruby .kanji-box {
     display: inline-block;
-    width: 1.8em;
+    width: 1.6em;
     border: var(--box-border);
     background: #fff;
     box-sizing: border-box;

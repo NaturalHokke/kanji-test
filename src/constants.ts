@@ -1,8 +1,3 @@
-export const CIRCLED = [
-  "①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩",
-  "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳",
-];
-
 export const ORIENTATION_UI = {
   landscape: { label: "横向き", preview: "A4 横向き・縦書き" },
   portrait: { label: "縦向き", preview: "A4 縦向き・縦書き" },

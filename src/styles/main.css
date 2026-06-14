@@ -18,7 +18,8 @@ body {
     display: grid;
     grid-template-columns: 360px 1fr;
     gap: 0;
-    min-height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .sidebar {
@@ -110,14 +111,34 @@ button:hover { opacity: 0.88; }
 }
 
 .preview-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    height: 100%;
     padding: 20px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .preview-label {
+    flex-shrink: 0;
     font-size: 0.8rem;
     color: #666;
     margin-bottom: 8px;
+}
+
+/* プレビュー枠：幅にフィットさせ縦方向のみスクロール */
+.preview-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.preview-scale-host {
+    width: 100%;
 }
 
 /* ===== 印刷プレビュー（A4） ===== */
@@ -493,6 +514,18 @@ button:hover { opacity: 0.88; }
     .preview-wrap {
         padding: 0;
         overflow: visible;
+    }
+
+    .preview-scroll {
+        overflow: visible;
+    }
+
+    .preview-scale-host {
+        height: auto !important;
+    }
+
+    #print-root {
+        transform: none !important;
     }
     #print-root {
         width: auto;

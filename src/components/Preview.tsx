@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ORIENTATION_UI, PREVIEW_MODE_LABELS } from "../constants";
 import type { SheetSettings } from "../constants";
+import { usePreviewFitScale } from "../hooks/usePreviewFitScale";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { LayoutMeasurer, type LayoutResult } from "./LayoutMeasurer";
 import { Sheet } from "./Sheet";
@@ -19,45 +20,60 @@ export function Preview({ lines, settings, mode }: Props) {
   const modeLabel = PREVIEW_MODE_LABELS[mode] ?? mode;
   const [layoutResult, setLayoutResult] = useState<LayoutResult>(EMPTY_LAYOUT);
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const handleLayout = useCallback((next: LayoutResult) => {
     setLayoutResult(next);
   }, []);
 
-  if (lines.length === 0) {
-    return (
-      <main className="preview-wrap">
-        <p className="preview-label">
-          ↓ 印刷プレビュー（{orientUi.preview}・{modeLabel}）
-        </p>
-        <div id="print-root" data-orientation={orientation}>
-          <div className="empty-msg">問題を入力して「作成」を押してください</div>
-        </div>
-      </main>
-    );
-  }
+  usePreviewFitScale(scrollRef, contentRef, hostRef, [
+    lines,
+    layoutResult,
+    orientation,
+    settings,
+    mode,
+  ]);
 
   return (
     <main className="preview-wrap">
       <p className="preview-label">
         ↓ 印刷プレビュー（{orientUi.preview}・{modeLabel}）
       </p>
-      <LayoutMeasurer
-        lines={lines}
-        settings={settings}
-        mode={mode}
-        onLayout={handleLayout}
-      />
-      <div id="print-root" data-orientation={orientation}>
-        {layoutResult.layout.pages.map((pageTiers, pi) => (
-          <Sheet
-            key={pi}
-            tiers={pageTiers}
-            lines={lines}
-            settings={settings}
-            mode={mode}
-            colGap={layoutResult.colGap}
-          />
-        ))}
+      {lines.length > 0 && (
+        <LayoutMeasurer
+          lines={lines}
+          settings={settings}
+          mode={mode}
+          onLayout={handleLayout}
+        />
+      )}
+      <div
+        className="preview-scroll"
+        ref={scrollRef}
+        data-orientation={orientation}
+      >
+        <div className="preview-scale-host" ref={hostRef}>
+          <div id="print-root" ref={contentRef} data-orientation={orientation}>
+            {lines.length === 0 ? (
+              <div className="empty-msg">
+                問題を入力して「作成」を押してください
+              </div>
+            ) : (
+              layoutResult.layout.pages.map((pageTiers, pi) => (
+                <Sheet
+                  key={pi}
+                  tiers={pageTiers}
+                  lines={lines}
+                  settings={settings}
+                  mode={mode}
+                  colGap={layoutResult.colGap}
+                />
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </main>
   );

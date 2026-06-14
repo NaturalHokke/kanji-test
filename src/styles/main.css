@@ -167,7 +167,7 @@ button:hover { opacity: 0.88; }
     --gap-header-body: 8mm;
     --gap-header-col: 4mm;
     --gap-header-block: 6mm;
-    --gap-tier: 5mm;
+    --gap-tier: 10mm;
     --gap-col-alpha: 1mm;
     --gap-sheet: 16px;
     --tier-row-rule: 1px solid #111;
@@ -252,7 +252,7 @@ button:hover { opacity: 0.88; }
     flex: 1;
     min-width: 0;
     height: 100%;
-    gap: var(--gap-tier, 5mm);
+    gap: var(--gap-tier, 10mm);
     justify-content: flex-start;
     row-rule: var(--tier-row-rule);
 }
@@ -266,8 +266,9 @@ button:hover { opacity: 0.88; }
     align-items: stretch;
 }
 
-/* 計測前のフォールバック（書き取り） */
-.sheet[data-preview-mode="write"] .q-tier {
+/* 計測前のフォールバック（書き取り・読み取り） */
+.sheet[data-preview-mode="write"] .q-tier,
+.sheet[data-preview-mode="read"] .q-tier {
     gap: var(--gap-col, calc(var(--yomi-size, 5pt) + var(--gap-col-alpha, 1mm)));
 }
 
@@ -358,7 +359,6 @@ button:hover { opacity: 0.88; }
 
 .blank-ruby rt.display-text {
     text-decoration: underline solid red;
-    text-underline-offset: 0.15em;
 }
 
 .blank-ruby.line-wavy rt.display-text {
@@ -366,16 +366,29 @@ button:hover { opacity: 0.88; }
 }
 
 .token-read {
-    display: inline;
+    position: relative;
+    display: inline-block;
 }
 
 .token-read .surface.display-text {
     text-decoration: underline solid red;
-    text-underline-offset: 0.15em;
 }
 
 .token-read .okurigana.display-text {
     text-decoration: none;
+}
+
+/* 読み記入レーン（書き取り rt と同位置・列 gap 計測用） */
+.read-yomi-lane {
+    position: absolute;
+    right: 0;
+    top: 1em;
+    margin-right: -1.3em;
+    width: 1em;
+    height: 1em;
+    font-size: var(--yomi-size, 5pt);
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .token-answer {

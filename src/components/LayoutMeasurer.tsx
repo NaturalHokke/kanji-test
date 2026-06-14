@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
-import type { SheetSettings } from "../constants";
+import { colGapAlphaMm, type SheetSettings } from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { measureColGap } from "../layout/measureColGap";
 import { paginate, type PageLayout } from "../layout/paginate";
@@ -18,7 +18,7 @@ type Props = {
   onLayout: (result: LayoutResult) => void;
 };
 
-function sheetCssVars(settings: SheetSettings): CSSProperties {
+function sheetCssVars(settings: SheetSettings, mode: PreviewMode): CSSProperties {
   return {
     "--body-size": `${settings.bodySize}pt`,
     "--title-size": `${settings.titleSize}pt`,
@@ -26,7 +26,7 @@ function sheetCssVars(settings: SheetSettings): CSSProperties {
     "--name-size": `${settings.nameSize}pt`,
     "--yomi-size": `${settings.yomiSize}pt`,
     "--box-scale": settings.boxScale / 100,
-    "--gap-col-alpha": `${settings.colGap}mm`,
+    "--gap-col-alpha": `${colGapAlphaMm(settings, mode)}mm`,
   } as CSSProperties;
 }
 
@@ -95,7 +95,7 @@ export function LayoutMeasurer({ lines, settings, mode, onLayout }: Props) {
         className="sheet"
         data-orientation={settings.orientation}
         data-preview-mode={mode}
-        style={sheetCssVars(settings)}
+        style={sheetCssVars(settings, mode)}
       >
         <div className="sheet-layout">
           <SheetHeader settings={settings} />

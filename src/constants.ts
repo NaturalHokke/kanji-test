@@ -1,3 +1,5 @@
+import type { PreviewMode } from "./parser/types";
+
 export const ORIENTATION_UI = {
   landscape: { label: "横向き", preview: "A4 横向き・縦書き" },
   portrait: { label: "縦向き", preview: "A4 縦向き・縦書き" },
@@ -26,8 +28,18 @@ export type SheetSettings = {
   nameSize: number;
   yomiSize: number;
   boxScale: number;
-  colGap: number;
+  writeColGap: number;
+  readColGap: number;
 };
+
+/** 列 gap の α（mm）。書き取り・読み取りで別設定 */
+export function colGapAlphaMm(
+  settings: SheetSettings,
+  mode: PreviewMode,
+): number {
+  if (mode === "read" || mode === "answer-read") return settings.readColGap;
+  return settings.writeColGap;
+}
 
 export function buildDefaultSettings(): SheetSettings {
   return {
@@ -41,7 +53,8 @@ export function buildDefaultSettings(): SheetSettings {
     nameSize: 14,
     yomiSize: 9,
     boxScale: 100,
-    colGap: 3,
+    writeColGap: 3,
+    readColGap: 8,
   };
 }
 
@@ -51,5 +64,8 @@ export function rangeOptions(min: number, max: number, selected: number) {
     return { value: n, label: String(n), selected: n === selected };
   });
 }
+
+/** 列間余白 α（mm）の選択肢 */
+export const COL_GAP_MM_OPTIONS = [1, 2, 3, 4, 5, 6, 8, 10];
 
 export const BOX_SCALE_OPTIONS = [80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];

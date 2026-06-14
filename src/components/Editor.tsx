@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import {
   BOX_SCALE_OPTIONS,
+  COL_GAP_MM_OPTIONS,
   ORIENTATION_UI,
   buildDefaultSettings,
   rangeOptions,
@@ -174,6 +175,37 @@ export function Editor({
             onChange={(e) => patch({ boxScale: Number(e.target.value) })}
           >
             {BOX_SCALE_OPTIONS.map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="row-2">
+        <div>
+          <label htmlFor="writeColGap">書き取り・列間余白 (mm)</label>
+          <select
+            id="writeColGap"
+            value={settings.writeColGap}
+            onChange={(e) => patch({ writeColGap: Number(e.target.value) })}
+          >
+            {COL_GAP_MM_OPTIONS.map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="readColGap">読み取り・列間余白 (mm)</label>
+          <select
+            id="readColGap"
+            value={settings.readColGap}
+            onChange={(e) => patch({ readColGap: Number(e.target.value) })}
+          >
+            {COL_GAP_MM_OPTIONS.map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>

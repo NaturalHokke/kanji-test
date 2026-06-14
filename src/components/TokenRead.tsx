@@ -22,6 +22,7 @@ export function TokenRead({ token }: Props) {
       {okurigana ? (
         <span className="display-text okurigana">{okurigana}</span>
       ) : null}
+      <span className="read-yomi-lane" aria-hidden />
     </span>
   );
 }

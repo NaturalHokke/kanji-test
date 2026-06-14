@@ -38,6 +38,8 @@ export function App() {
     settings.nameSize,
     settings.yomiSize,
     settings.boxScale,
+    settings.writeColGap,
+    settings.readColGap,
     settings.orientation,
     handleBuild,
   ]);

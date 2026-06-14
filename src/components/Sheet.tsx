@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { SheetSettings } from "../constants";
+import { colGapAlphaMm, type SheetSettings } from "../constants";
 import type { ParseResult, PreviewMode } from "../parser/types";
 import { SheetHeader } from "./SheetHeader";
 import { QuestionCol } from "./QuestionCol";
@@ -29,7 +29,7 @@ export function Sheet({ tiers, lines, settings, mode, colGap }: Props) {
     "--name-size": `${settings.nameSize}pt`,
     "--yomi-size": `${settings.yomiSize}pt`,
     "--box-scale": settings.boxScale / 100,
-    "--gap-col-alpha": `${settings.colGap}mm`,
+    "--gap-col-alpha": `${colGapAlphaMm(settings, mode)}mm`,
     ...(colGap > 0 ? { "--gap-col": `${colGap}px` } : {}),
   } as CSSProperties;
 

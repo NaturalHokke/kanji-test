@@ -364,6 +364,10 @@ button:hover { opacity: 0.88; }
     display: inline;
 }
 
+.token-emphasis-bold .display-text {
+    font-weight: bold;
+}
+
 .parse-errors {
     font-size: 0.75rem;
     color: #b45309;

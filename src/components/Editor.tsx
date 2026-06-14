@@ -275,13 +275,13 @@ export function Editor({
       <div className="help">
         <strong>記法</strong>
         <br />
-        解答枠：<code>@(よみ,文字数)@</code>
+        基本: <code>「表記｜読み」</code>
         <br />
-        例：<code>@(きもち,2)@</code> → 読み「きもち」の2マス枠
+        例: <code>「失敗｜しっぱい」を「許す｜ゆるす」</code>
         <br />
-        文字数省略：<code>@(きもち)@</code> → 読みの文字数で自動
+        太字: <code>『表記｜読み』</code>
         <br />
-        読み省略：<code>@(,2)@</code> または <code>@(2)@</code>
+        半角: <code>&quot;表記|読み&quot;</code> <code>&apos;表記|読み&apos;</code> も可
         <br />
         <br />
         1ページ <strong>20問</strong>（10問×2段・A4 {orientUi.label}）。21問目以降は次ページへ。

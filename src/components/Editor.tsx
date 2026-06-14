@@ -8,9 +8,12 @@ import {
   type Orientation,
 } from "../constants";
 
+import type { ParseError } from "../parser/types";
+
 type Props = {
   settings: SheetSettings;
   questions: string;
+  parseErrors: ParseError[];
   onSettingsChange: (settings: SheetSettings) => void;
   onQuestionsChange: (questions: string) => void;
   onBuild: () => void;
@@ -19,6 +22,7 @@ type Props = {
 export function Editor({
   settings,
   questions,
+  parseErrors,
   onSettingsChange,
   onQuestionsChange,
   onBuild,
@@ -210,6 +214,16 @@ export function Editor({
         value={questions}
         onChange={(e) => onQuestionsChange(e.target.value)}
       />
+
+      {parseErrors.length > 0 && (
+        <div className="parse-errors">
+          {parseErrors.map((err, i) => (
+            <p key={i}>
+              {err.line}行目: {err.message}
+            </p>
+          ))}
+        </div>
+      )}
 
       <div className="btn-row">
         <button type="button" className="primary" onClick={onBuild}>

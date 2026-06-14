@@ -320,6 +320,43 @@ button:hover { opacity: 0.88; }
     letter-spacing: 0.3em;
 }
 
+.blank-ruby rt.display-text {
+    text-decoration: underline solid red;
+    text-underline-offset: 0.15em;
+}
+
+.blank-ruby.line-wavy rt.display-text {
+    text-decoration-style: wavy;
+}
+
+.kanji-box-stack {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.15em;
+}
+
+.kanji-box-unit {
+    height: calc(var(--body-size, 9pt) * 2.2 * var(--box-scale, 1)) !important;
+}
+
+.parse-errors {
+    font-size: 0.75rem;
+    color: #b45309;
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.parse-errors p {
+    margin: 0 0 4px;
+}
+
+.parse-errors p:last-child {
+    margin-bottom: 0;
+}
+
 .empty-msg {
     writing-mode: horizontal-tb;
     padding: 40px;

@@ -1,10 +1,11 @@
 import { PER_PAGE, PER_TIER, CIRCLED } from "../constants";
 import type { SheetSettings } from "../constants";
+import type { ParseResult } from "../parser/types";
 import { SheetHeader } from "./SheetHeader";
 import { QuestionCol } from "./QuestionCol";
 
 type Props = {
-  pageQuestions: string[];
+  pageQuestions: ParseResult[];
   pageIndex: number;
   settings: SheetSettings;
 };
@@ -13,14 +14,16 @@ export function Sheet({ pageQuestions, pageIndex, settings }: Props) {
   const tier1 = pageQuestions.slice(0, PER_TIER);
   const tier2 = pageQuestions.slice(PER_TIER, PER_PAGE);
 
-  const renderTier = (tier: string[], tierStart: number) => (
+  const renderTier = (tier: ParseResult[], tierStart: number) => (
     <div className="q-tier">
       {tier.map((q, i) => {
         const globalIndex = tierStart + i;
         const num =
           CIRCLED[globalIndex] ??
           String(pageIndex * PER_PAGE + globalIndex + 1);
-        return <QuestionCol key={globalIndex} num={num} question={q} />;
+        return (
+          <QuestionCol key={globalIndex} num={num} segments={q.segments} />
+        );
       })}
     </div>
   );

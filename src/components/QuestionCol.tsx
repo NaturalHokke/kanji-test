@@ -1,19 +1,19 @@
-import { parseLineLegacy } from "../legacy/parseLegacy";
+import { SegmentRenderer } from "./SegmentRenderer";
+import type { Segment } from "../parser/types";
 
 type Props = {
   num: string;
-  question: string;
+  segments: Segment[];
 };
 
-export function QuestionCol({ num, question }: Props) {
+export function QuestionCol({ num, segments }: Props) {
   return (
     <div className="q-col">
       <div className="q-num">{num}</div>
       <div className="q-text">
-        <div
-          className="q-text-inner"
-          dangerouslySetInnerHTML={{ __html: parseLineLegacy(question) }}
-        />
+        <div className="q-text-inner">
+          <SegmentRenderer segments={segments} />
+        </div>
       </div>
     </div>
   );

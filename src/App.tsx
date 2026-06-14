@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Editor } from "./components/Editor";
 import { Preview } from "./components/Preview";
 import {
@@ -6,23 +6,23 @@ import {
   buildDefaultSettings,
   type SheetSettings,
 } from "./constants";
-
-function parseQuestions(text: string): string[] {
-  return text
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter(Boolean);
-}
+import { parseDocument } from "./parser";
+import type { ParseResult } from "./parser/types";
 
 export function App() {
   const [settings, setSettings] = useState<SheetSettings>(buildDefaultSettings);
   const [questions, setQuestions] = useState(DEFAULT_QUESTIONS);
-  const [builtQuestions, setBuiltQuestions] = useState<string[]>(() =>
-    parseQuestions(DEFAULT_QUESTIONS),
+  const [builtLines, setBuiltLines] = useState<ParseResult[]>(() =>
+    parseDocument(DEFAULT_QUESTIONS).lines,
+  );
+
+  const parseErrors = useMemo(
+    () => parseDocument(questions).errors,
+    [questions],
   );
 
   const handleBuild = useCallback(() => {
-    setBuiltQuestions(parseQuestions(questions));
+    setBuiltLines(parseDocument(questions).lines);
   }, [questions]);
 
   useEffect(() => {
@@ -46,11 +46,12 @@ export function App() {
       <Editor
         settings={settings}
         questions={questions}
+        parseErrors={parseErrors}
         onSettingsChange={setSettings}
         onQuestionsChange={setQuestions}
         onBuild={handleBuild}
       />
-      <Preview questions={builtQuestions} settings={settings} />
+      <Preview lines={builtLines} settings={settings} />
     </div>
   );
 }

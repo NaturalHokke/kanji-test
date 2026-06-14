@@ -1,9 +1,10 @@
 import { PER_PAGE, ORIENTATION_UI } from "../constants";
 import type { SheetSettings } from "../constants";
+import type { ParseResult } from "../parser/types";
 import { Sheet } from "./Sheet";
 
 type Props = {
-  questions: string[];
+  lines: ParseResult[];
   settings: SheetSettings;
 };
 
@@ -15,14 +16,16 @@ function chunk<T>(arr: T[], size: number): T[][] {
   return out;
 }
 
-export function Preview({ questions, settings }: Props) {
+export function Preview({ lines, settings }: Props) {
   const orientation = settings.orientation;
   const orientUi = ORIENTATION_UI[orientation];
 
-  if (questions.length === 0) {
+  if (lines.length === 0) {
     return (
       <main className="preview-wrap">
-        <p className="preview-label">↓ 印刷プレビュー（{orientUi.preview}）</p>
+        <p className="preview-label">
+          ↓ 印刷プレビュー（{orientUi.preview}・書き取り）
+        </p>
         <div id="print-root" data-orientation={orientation}>
           <div className="empty-msg">問題を入力して「作成」を押してください</div>
         </div>
@@ -30,11 +33,13 @@ export function Preview({ questions, settings }: Props) {
     );
   }
 
-  const pages = chunk(questions, PER_PAGE);
+  const pages = chunk(lines, PER_PAGE);
 
   return (
     <main className="preview-wrap">
-      <p className="preview-label">↓ 印刷プレビュー（{orientUi.preview}）</p>
+      <p className="preview-label">
+        ↓ 印刷プレビュー（{orientUi.preview}・書き取り）
+      </p>
       <div id="print-root" data-orientation={orientation}>
         {pages.map((pageQs, pi) => (
           <Sheet

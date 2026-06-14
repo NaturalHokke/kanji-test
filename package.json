@@ -6,7 +6,8 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "npm run build && vite preview",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.31.1",
@@ -15,6 +16,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "typescript": "^6.0.3",
     "vite": "^7.0.0",
+    "vitest": "^4.1.8",
     "wrangler": "^4.22.0"
   },
   "dependencies": {

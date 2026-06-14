@@ -11,7 +11,8 @@ export const ORIENTATION_UI = {
   portrait: { label: "縦向き", preview: "A4 縦向き・縦書き" },
 } as const;
 
-export const DEFAULT_QUESTIONS = "@(きもち,2)@";
+export const DEFAULT_QUESTIONS =
+  "「失敗｜しっぱい」を「許す｜ゆるす」";
 
 export type Orientation = "landscape" | "portrait";
 

@@ -1,0 +1,328 @@
+:root {
+    --font-print: "UD Mincho", "BIZ UDPMincho", "Yu Mincho", "Hiragino Mincho ProN", "MS Mincho", serif;
+    --font-ui: "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+    --box-border: 1.5px solid #111;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: var(--font-ui);
+    background: #f0f2f5;
+    color: #222;
+}
+
+/* ===== 編集パネル（画面のみ） ===== */
+.editor {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background: #fff;
+    border-right: 1px solid #ddd;
+    padding: 16px;
+    overflow-y: auto;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.sidebar h1 {
+    font-size: 1.1rem;
+    margin: 0 0 12px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 8px;
+}
+
+.sidebar label {
+    display: block;
+    font-size: 0.78rem;
+    color: #555;
+    margin: 10px 0 4px;
+}
+
+.sidebar input[type="text"],
+.sidebar select,
+.sidebar textarea {
+    width: 100%;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 8px;
+}
+
+.sidebar textarea {
+    height: 280px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+button {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    padding: 7px 12px;
+    border: 1px solid #888;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+button.primary {
+    background: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+}
+
+button:hover { opacity: 0.88; }
+
+.help {
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.help code {
+    background: #eee;
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+.preview-wrap {
+    padding: 20px;
+    overflow: auto;
+}
+
+.preview-label {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+/* ===== 印刷プレビュー（A4 横向き） ===== */
+#print-root {
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    margin: 0 auto;
+    width: 297mm;
+}
+
+@page {
+    size: A4 landscape;
+    margin: 5mm 5mm;
+}
+
+.sheet {
+    width: 297mm;
+    height: 210mm;
+    padding: var(--sheet-pad, 6mm) var(--sheet-pad-x, 8mm);
+    page-break-after: always;
+    font-family: var(--font-print);
+    color: #111;
+    overflow: hidden;
+    line-height: 1;
+    /* 間隔はすべてここで一元管理（padding / line-height による微調整は使わない） */
+    --sheet-pad: 6mm;
+    --sheet-pad-x: 8mm;
+    --gap-header-body: 8mm;
+    --gap-header-col: 4mm;
+    --gap-header-block: 6mm;
+    --gap-tier: 5mm;
+    --gap-col: 3mm;
+    --gap-num-text: 1mm;
+    --gap-yomi: 0.9mm;
+    --width-yomi-lane: 4mm;
+    --height-q-head: 5mm;
+}
+
+.sheet:last-child {
+    page-break-after: auto;
+}
+
+/* ── ページ全体 ── */
+.sheet-layout {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: stretch;
+    gap: var(--gap-header-body);
+    height: 100%;
+    width: 100%;
+}
+
+/* ── 表題エリア：2列（右=表題+名前 / 左=説明） ── */
+.sheet-header {
+    flex-shrink: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--gap-header-col, 4mm);
+    align-items: stretch;
+}
+
+.header-col {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 右列：表題（上）と名前欄（下）を1縦列に */
+.header-col-title {
+    justify-content: space-between;
+}
+
+.header-col-instruction {
+    justify-content: flex-start;
+}
+
+.header-vtext {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    text-align: center;
+}
+
+.sheet-title {
+    font-size: var(--title-size, 14pt);
+    font-weight: bold;
+    letter-spacing: 0.12em;
+}
+
+.sheet-instruction {
+    font-size: var(--subtitle-size, 9pt);
+    letter-spacing: 0.06em;
+}
+
+.name-line {
+    font-size: var(--name-size, 9pt);
+    letter-spacing: 0.18em;
+}
+
+/* ── 問題エリア：2段 × 各10問 ── */
+.questions-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    gap: var(--gap-tier, 5mm);
+}
+
+.q-tier {
+    display: flex;
+    flex-direction: row-reverse;
+    flex: 1;
+    gap: var(--gap-col, 3mm);
+    min-height: 0;
+    align-items: stretch;
+}
+
+/* ── 1問：Flex 列（番号 → 本文） ── */
+.q-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-num-text, 1mm);
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.q-num {
+    font-size: calc(var(--body-size, 9pt) * 0.82);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+/* 本文列 + 読み仮名レーン */
+.q-text {
+    flex: 1 1 0;
+    align-content: start;
+    justify-items: center;
+}
+
+.q-text-inner {
+    grid-column: 1;
+    grid-row: 1;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: var(--body-size, 9pt);
+    letter-spacing: 0.06em;
+    text-align: center;
+}
+
+/* 解答枠 + 読み仮名：ruby / rt */
+.blank-ruby {
+    position: relative;
+    display: inline-block;
+}
+
+.blank-ruby .kanji-box {
+    display: inline-block;
+    width: 1.7em;
+    border: var(--box-border);
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.blank-ruby.w-1 .kanji-box { height: calc(var(--body-size, 9pt) * 2.2 * var(--box-scale, 1)); }
+.blank-ruby.w-2 .kanji-box { height: calc(var(--body-size, 9pt) * 4.2 * var(--box-scale, 1)); }
+.blank-ruby.w-3 .kanji-box { height: calc(var(--body-size, 9pt) * 6.2 * var(--box-scale, 1)); }
+.blank-ruby.w-4 .kanji-box { height: calc(var(--body-size, 9pt) * 8.2 * var(--box-scale, 1)); }
+.blank-ruby.w-5 .kanji-box { height: calc(var(--body-size, 9pt) * 10.2 * var(--box-scale, 1)); }
+.blank-ruby.w-6 .kanji-box { height: calc(var(--body-size, 9pt) * 12.2 * var(--box-scale, 1)); }
+
+.blank-ruby rt {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    right: -1.1em;
+    justify-content: center;
+    color: #333;
+    font-size: var(--yomi-size, 5pt);
+    font-family: var(--font-print);
+}
+
+.empty-msg {
+    writing-mode: horizontal-tb;
+    padding: 40px;
+    text-align: center;
+    color: #999;
+}
+
+@media print {
+    body { background: #fff; }
+    .editor { display: block; }
+    .sidebar, .preview-label { display: none !important; }
+    .preview-wrap {
+        padding: 0;
+        overflow: visible;
+    }
+    #print-root {
+        box-shadow: none;
+        width: auto;
+    }
+    .sheet {
+        width: 297mm;
+        height: 210mm;
+    }
+}
